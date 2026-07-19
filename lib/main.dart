@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,14 +22,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class GlassWeatherDashboard extends StatefulWidget {
-  const GlassWeatherDashboard({super.key});
-
-  @override
-  State<GlassWeatherDashboard> createState() {
-    return const _GlassWeatherDashboardState();
-  }
-}
+enum WeatherState { sunny, cloudy, rainy }
 
 class HourlyData {
   final String time;
@@ -40,19 +32,27 @@ class HourlyData {
   const HourlyData(this.time, this.temp, this.icon, this.active);
 }
 
+class GlassWeatherDashboard extends StatefulWidget {
+  const GlassWeatherDashboard({super.key});
+
+  @override
+  State<GlassWeatherDashboard> createState() {
+    return _GlassWeatherDashboardState();
+  }
+}
+
 class _GlassWeatherDashboardState extends State<GlassWeatherDashboard> {
-  late String _currentWeather;
+  late WeatherState _currentWeather;
   late bool _isCardPressed;
 
   @override
   void initState() {
     super.initState();
-    _currentWeather = 'sunny';
+    _currentWeather = WeatherState.sunny;
     _isCardPressed = false;
   }
 
   void _triggerFeedback() {
-  
   }
 
   @override
@@ -102,13 +102,15 @@ class _GlassWeatherDashboardState extends State<GlassWeatherDashboard> {
   }
 
   List<Color> _getWeatherAura() {
-    if (_currentWeather.contains('rainy')) {
-      return [Colors.blueGrey.withAlpha(50), Colors.indigo.withAlpha(20),const Color(0xFF030307)];
+    switch (_currentWeather) {
+      case WeatherState.rainy:
+        return [Colors.blueGrey.withAlpha(50), Colors.indigo.withAlpha(20), const Color(0xFF030307)];
+      case WeatherState.cloudy:
+        return [Colors.purpleAccent.withAlpha(35),Colors.blueAccent.withAlpha(15), const Color(0xFF030307)];
+      case WeatherState.sunny:
+      default:
+        return [Colors.amberAccent.withAlpha(40),Colors.orangeAccent.withAlpha(15), const Color(0xFF030307)];
     }
-    if (_currentWeather.contains('cloudy')) {
-      return [Colors.purpleAccent.withAlpha(35),Colors.blueAccent.withAlpha(15), const Color(0xFF030307)];
-    }
-    return [Colors.amberAccent.withAlpha(40),Colors.orangeAccent.withAlpha(15), const Color(0xFF030307)];
   }
 
   Widget _buildLocationHeader() {
@@ -129,8 +131,8 @@ class _GlassWeatherDashboardState extends State<GlassWeatherDashboard> {
             ),
           ],
         ),
-        PopupMenuButton<String>(
-          onSelected: (String value) {
+        PopupMenuButton<WeatherState>(
+          onSelected: (WeatherState value) {
             _triggerFeedback();
             setState(() {
               _currentWeather = value;
@@ -149,9 +151,9 @@ class _GlassWeatherDashboardState extends State<GlassWeatherDashboard> {
           ),
           itemBuilder: (BuildContext context) {
             return [
-              const PopupMenuItem<String>(value: 'sunny', child:Text('Sunny')),
-              const PopupMenuItem<String>(value: 'cloudy', child:Text('Cloudy')),
-              const PopupMenuItem<String>(value: 'rainy', child:Text('Rainy')),
+              const PopupMenuItem<WeatherState>(value: WeatherState.sunny,child: Text('Sunny')),
+              const PopupMenuItem<WeatherState>(value: WeatherState.cloudy,child: Text('Cloudy')),
+              const PopupMenuItem<WeatherState>(value: WeatherState.rainy,child: Text('Rainy')),
             ];
           },
         ),
@@ -160,6 +162,20 @@ class _GlassWeatherDashboardState extends State<GlassWeatherDashboard> {
   }
 
   Widget _buildMainWeatherCard() {
+    IconData displayIcon = Icons.wb_sunny;
+    Color iconColor = Colors.amberAccent;
+    String weatherText = 'SUNNY';
+
+    if (_currentWeather == WeatherState.cloudy) {
+      displayIcon = Icons.cloud;
+      iconColor = Colors.white.withAlpha(200);
+      weatherText = 'CLOUDY';
+    } else if (_currentWeather == WeatherState.rainy) {
+      displayIcon = Icons.thunderstorm;
+      iconColor = Colors.white.withAlpha(200);
+      weatherText = 'RAIN';
+    }
+
     return GestureDetector(
       onTapDown: (TapDownDetails details) {
         setState(() {
@@ -207,21 +223,15 @@ class _GlassWeatherDashboardState extends State<GlassWeatherDashboard> {
                         )
                       ),
                       Icon(
-                        _currentWeather.contains('sunny')
-                            ? Icons.wb_sunny
-                            : (_currentWeather.contains('cloudy') ? Icons.cloud : Icons.thunderstorm),
-                        color: _currentWeather.contains('sunny')
-                            ? Colors.amberAccent
-                            : Colors.white.withAlpha(200),
+                        displayIcon,
+                        color: iconColor,
                         size: 72,
                       ),
                     ],
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    _currentWeather.contains('sunny')
-                        ? 'SUNNY'
-                        : (_currentWeather.contains('cloudy') ? 'CLOUDY' :'RAIN'),
+                    weatherText,
                     style: const TextStyle(color: Colors.white, fontSize:16, fontWeight: FontWeight.w600, letterSpacing: 3.0),
                   ),
                   const SizedBox(height: 4),
@@ -243,15 +253,14 @@ class _GlassWeatherDashboardState extends State<GlassWeatherDashboard> {
       children: [
         _buildMetricItem(Icons.water_drop_outlined, 'HUMIDITY', '64%',Colors.blueAccent),
         const SizedBox(width: 14),
-        _buildMetricItem(Icons.air_rounded, 'WIND', '12kmh',Colors.tealAccent),
+        _buildMetricItem(Icons.air_rounded, 'WIND', '12kmh', Colors.tealAccent),
         const SizedBox(width: 14),
         _buildMetricItem(Icons.wb_sunny_rounded, 'UV_INDEX', 'Low',Colors.amberAccent),
       ],
     );
   }
 
-  Widget _buildMetricItem(IconData icon, String title, String value, Color
-accentColor) {
+  Widget _buildMetricItem(IconData icon, String title, String value, Color accentColor) {
     return Expanded(
       child: ClipRRect(
         borderRadius: BorderRadius.circular(24.0),
@@ -299,6 +308,3 @@ accentColor) {
         SizedBox(
           height: 130,
           child: ListView(
-            scrollDirection: Axis.horizontal,
-            physics: const BouncingScrollPhysics(),
-            children: [
