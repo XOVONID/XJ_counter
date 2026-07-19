@@ -32,6 +32,14 @@ class GlassWeatherDashboard extends StatefulWidget {
   }
 }
 
+class HourlyData {
+  final String time;
+  final String temp;
+  final IconData icon;
+  final bool active;
+  const HourlyData(this.time, this.temp, this.icon, this.active);
+}
+
 class _GlassWeatherDashboardState extends State<GlassWeatherDashboard> {
   String _currentWeather = 'sunny';
   bool _isCardPressed = false;
@@ -107,15 +115,13 @@ Colors.orangeAccent.withAlpha(15), const Color(0xFF030307)];
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'TAIPEI_CITY',
-              style: TextStyle(color: Colors.white, fontSize: 26,
-fontWeight: FontWeight.w300, letterSpacing: 1.5)
+              'TAIPEI',
+              style: TextStyle(color: Colors.white, fontSize: 26,fontWeight: FontWeight.w300, letterSpacing: 1.5)
             ),
             const SizedBox(height: 4),
             Text(
-              'Sunday_July_19',
-              style: TextStyle(color: Colors.white.withAlpha(120),
-fontSize: 13)
+              'Sunday',
+              style: TextStyle(color: Colors.white.withAlpha(120),fontSize: 13)
             ),
           ],
         ),
@@ -133,19 +139,15 @@ fontSize: 13)
               child: Container(
                 padding: const EdgeInsets.all(10),
                 color: Colors.white.withAlpha(20),
-                child: const Icon(Icons.wb_sunny_outlined, color:
-Colors.white, size: 20),
+                child: const Icon(Icons.wb_sunny_outlined, color:Colors.white, size: 20),
               ),
             ),
           ),
           itemBuilder: (BuildContext context) {
             return [
-              const PopupMenuItem<String>(value: 'sunny', child:
-Text('SunnyMode')),
-              const PopupMenuItem<String>(value: 'cloudy', child:
-Text('CloudyMode')),
-              const PopupMenuItem<String>(value: 'rainy', child:
-Text('RainyMode')),
+              const PopupMenuItem<String>(value: 'sunny', child:Text('Sunny')),
+              const PopupMenuItem<String>(value: 'cloudy', child:Text('Cloudy')),
+              const PopupMenuItem<String>(value: 'rainy', child:Text('Rainy')),
             ];
           },
         ),
@@ -161,11 +163,11 @@ Text('RainyMode')),
     if (_currentWeather == 'cloudy') {
       displayIcon = Icons.cloud;
       iconColor = Colors.white.withAlpha(200);
-      weatherText = 'PARTLY_CLOUDY';
+      weatherText = 'CLOUDY';
     } else if (_currentWeather == 'rainy') {
       displayIcon = Icons.thunderstorm;
       iconColor = Colors.white.withAlpha(200);
-      weatherText = 'HEAVY_RAIN';
+      weatherText = 'RAIN';
     }
 
     return GestureDetector(
@@ -198,8 +200,7 @@ Text('RainyMode')),
               decoration: BoxDecoration(
                 color: Colors.white.withAlpha(12),
                 borderRadius: BorderRadius.circular(36.0),
-                border: Border.all(color: Colors.white.withAlpha(20),
-width: 1.0),
+                border: Border.all(color: Colors.white.withAlpha(20),width: 1.0),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -225,14 +226,12 @@ width: 1.0),
                   const SizedBox(height: 10),
                   Text(
                     weatherText,
-                    style: const TextStyle(color: Colors.white, fontSize:
-16, fontWeight: FontWeight.w600, letterSpacing: 3.0),
+                    style: const TextStyle(color: Colors.white, fontSize:16, fontWeight: FontWeight.w600, letterSpacing: 3.0),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'H_31C__L_24C',
-                    style: TextStyle(color: Colors.white.withAlpha(140),
-fontSize: 13)
+                    'H31C_L24C',
+                    style: TextStyle(color: Colors.white.withAlpha(140), fontSize: 13)
                   ),
                 ],
               ),
@@ -249,10 +248,10 @@ fontSize: 13)
         _buildMetricItem(Icons.water_drop_outlined, 'HUMIDITY', '64%',
 Colors.blueAccent),
         const SizedBox(width: 14),
-        _buildMetricItem(Icons.air_rounded, 'WIND', '12_kmh',
+        _buildMetricItem(Icons.air_rounded, 'WIND', '12kmh',
 Colors.tealAccent),
         const SizedBox(width: 14),
-        _buildMetricItem(Icons.wb_sunny_rounded, 'UV_INDEX', '4_Low',
+        _buildMetricItem(Icons.wb_sunny_rounded, 'UV_INDEX', 'Low',
 Colors.amberAccent),
       ],
     );
@@ -294,14 +293,6 @@ fontSize: 16, fontWeight: FontWeight.w500)),
   }
 
   Widget _buildHourlyForecast() {
-    final List<Map<String, dynamic>> hourlyData = List.of([
-      {'time': 'Now', 'temp': '28C', 'icon': Icons.wb_sunny, 'active':true},
-      {'time': '13:00', 'temp': '29C', 'icon': Icons.wb_sunny, 'active':false},
-      {'time': '14:00', 'temp': '30C', 'icon': Icons.cloud, 'active':false},
-      {'time': '15:00', 'temp': '27C', 'icon': Icons.thunderstorm,'active': false},
-      {'time': '16:00', 'temp': '26C', 'icon': Icons.thunderstorm,'active': false},
-    ]);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -319,54 +310,9 @@ fontSize: 16, fontWeight: FontWeight.w500)),
         ),
         SizedBox(
           height: 130,
-          child: ListView.builder(
+          child: ListView(
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
-            itemCount: hourlyData.length,
-            itemBuilder: (BuildContext  context, index) {
-              final Map<String, dynamic> item = hourlyData[index];
-              final bool isActive = item['active'] as bool;
-              
-              return Container(
-                margin: const EdgeInsets.only(right: 12),
-                width: 75,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(24.0),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: isActive ?
-Colors.white.withAlpha(22) : Colors.white.withAlpha(10),
-                        borderRadius: BorderRadius.circular(24.0),
-                        border: Border.all(
-                          color: isActive ?
-Colors.white.withAlpha(50) : Colors.white.withAlpha(15),
-                          width: 1.0,
-                        ),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(item['time'].toString(), style:
-TextStyle(color: Colors.white.withAlpha(140), fontSize: 12)),
-                          const SizedBox(height: 12),
-                          Icon(
-                            item['icon'] as IconData, 
-                            color: item['active'] ? Colors.amberAccent : Colors.white, 
-                            size: 22),
-                          const SizedBox(height: 12),
-                          Text(item['temp'].toString(), style: const
-TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
+            children: [
+              _buildHourItem(const HourlyData('Now', '28C', Icons.wb_sunny,
+true)),
