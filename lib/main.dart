@@ -2,6 +2,27 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Glass Weather',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        useMaterial3: true,
+      ),
+      home: const GlassWeatherDashboard(),
+    );
+  }
+}
+
 class GlassWeatherDashboard extends StatefulWidget {
   const GlassWeatherDashboard({super.key});
 
@@ -11,10 +32,6 @@ _GlassWeatherDashboardState();
 }
 
 class _GlassWeatherDashboardState extends State<GlassWeatherDashboard> {
-  // =E6=A8=A1=E6=93=AC=E7=95=B6=E5=89=8D=E5=A4=A9=E6=B0=A3=E7=8B=80=E6=85=
-=8B=EF=BC=9A'sunny'=EF=BC=88=E6=99=B4=E6=9C=97=E6=A5=B5=E5=85=89=EF=BC=89, =
-'rainy'=EF=BC=88=E9=9B=A8=E5=A4=A9=E6=B7=B1=E9=82=83=EF=BC=89, 'cloudy'=EF=
-=BC=88=E9=99=B0=E5=A4=A9=E8=BF=B7=E9=9C=A7=EF=BC=89
   String _currentWeather =3D 'sunny';
   bool _isCardPressed =3D false;
 
@@ -30,9 +47,6 @@ class _GlassWeatherDashboardState extends State<GlassWeatherDashboard> {
       backgroundColor: const Color(0xFF030307),
       body: Stack(
         children: [
-          // 1. =E7=92=B0=E5=A2=83=E5=85=89=E8=83=8C=E6=99=AF=E5=B1=A4=EF=
-=BC=9A=E6=A0=B9=E6=93=9A=E4=B8=8D=E5=90=8C=E5=A4=A9=E6=B0=A3=E5=88=87=E6=8F=
-=9B=E6=B6=B2=E6=85=8B=E6=B0=A3=E6=B0=9B=E5=85=89=E6=9A=88
           AnimatedContainer(
             duration: const Duration(milliseconds: 800),
             curve: Curves.easeInOutCubic,
@@ -46,40 +60,21 @@ class _GlassWeatherDashboardState extends State<GlassWeatherDashboard> {
               ),
             ),
           ),
-
-          // 2. =E5=85=A7=E5=AE=B9=E4=B8=BB=E5=B1=A4
           SafeArea(
             child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(), // iOS =E5=BD=88=E6=
-=80=A7=E6=BB=BE=E5=8B=95
+              physics: const BouncingScrollPhysics(),
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 20),
-                  // =E9=A0=82=E9=83=A8=E4=BD=8D=E7=BD=AE=E8=88=87=E5=A4=A9=
-=E6=B0=A3=E5=88=87=E6=8F=9B=EF=BC=88=E6=B5=81=E9=AB=94=E8=86=A0=E5=9B=8A=E5=
-=88=97=EF=BC=89
                   _buildLocationHeader(),
-
                   const SizedBox(height: 30),
-                  // =E4=B8=AD=E5=A4=AE=E6=A0=B8=E5=BF=83=EF=BC=9A=E5=B7=A8=
-=E5=B9=95=E7=84=A1=E9=82=8A=E6=A1=86=E6=BA=AB=E5=BA=A6=E8=88=87=E4=B8=BB=E5=
-=A4=A9=E6=B0=A3=E5=8D=A1
                   _buildMainWeatherCard(),
-
                   const SizedBox(height: 24),
-                  // =E6=A9=AB=E5=90=91=E6=B0=A3=E8=B1=A1=E8=A7=80=E6=B8=AC=
-=E6=8C=87=E6=A8=99=EF=BC=88=E6=BF=95=E5=BA=A6=E3=80=81=E9=A2=A8=E9=80=9F=E3=
-=80=81=E7=B4=AB=E5=A4=96=E7=B7=9A=EF=BC=8C=E6=8E=A1=E7=94=A8=E6=B5=81=E9=AB=
-=94=E7=8E=BB=E7=92=83=E6=A0=BC=EF=BC=89
                   _buildWeatherMetricsGrid(),
-
                   const SizedBox(height: 24),
-                  // 24=E5=B0=8F=E6=99=82=E9=A0=90=E5=A0=B1=EF=BC=88=E6=BB=
-=91=E5=8B=95=E5=BC=8F=E6=B6=B2=E6=85=8B=E6=99=82=E9=96=93=E8=BB=B8=EF=BC=89
                   _buildHourlyForecast(),
-
                   const SizedBox(height: 30),
                 ],
               ),
@@ -90,8 +85,6 @@ class _GlassWeatherDashboardState extends State<GlassWeatherDashboard> {
     );
   }
 
-  // =E4=BE=9D=E6=93=9A=E5=A4=A9=E6=B0=A3=E5=8B=95=E6=85=8B=E8=AE=8A=E6=9B=
-=B4=E8=83=8C=E6=99=AF=E6=A5=B5=E5=85=89=E9=85=8D=E8=89=B2
   List<Color> _getWeatherAura() {
     switch (_currentWeather) {
       case 'rainy':
@@ -107,8 +100,6 @@ Colors.orangeAccent.withAlpha(15), const Color(0xFF030307)];
     }
   }
 
-  // =E9=A0=82=E9=83=A8=E4=BD=8D=E7=BD=AE=E8=88=87=E6=A8=A1=E6=93=AC=E5=88=
-=87=E6=8F=9B=E5=88=97
   Widget _buildLocationHeader() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -123,9 +114,6 @@ fontSize: 26, fontWeight: FontWeight.w300, letterSpacing: 1.5)),
 Colors.white.withAlpha(120), fontSize: 13)),
           ],
         ),
-        // =E5=8F=B3=E5=81=B4=E5=A4=A9=E6=B0=A3=E7=8B=80=E6=85=8B=E5=88=87=
-=E6=8F=9B=E5=99=A8=EF=BC=88=E9=BB=9E=E6=93=8A=E5=8F=AF=E5=8D=B3=E6=99=82=E5=
-=88=87=E6=8F=9B UI =E8=A6=96=E8=A6=BA=E4=B8=BB=E9=A1=8C=EF=BC=89
         PopupMenuButton<String>(
           onSelected: (String value) {
             _triggerFeedback();
@@ -157,7 +145,6 @@ Text('=E9=9B=A8=E5=A4=A9=E6=A8=A1=E5=BC=8F')),
     );
   }
 
-  // =E4=B8=BB=E5=A4=A9=E6=B0=A3=E5=B7=A8=E5=B9=95=E5=8D=A1=E7=89=87
   Widget _buildMainWeatherCard() {
     return GestureDetector(
       onTapDown: (_) =3D> setState(() =3D> _isCardPressed =3D true),
@@ -186,11 +173,9 @@ width: 1.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('28=C2=B0', style: TextStyle(color:
+                      const Text('28C', style: TextStyle(color:
 Colors.white, fontSize: 86, fontWeight: FontWeight.w100, fontFamily: 'SF
 Pro Display')),
-                      // =E9=9A=A8=E7=8B=80=E6=85=8B=E6=9B=B4=E6=8F=9B=E5=
-=A4=A7=E5=9C=96=E7=A4=BA
                       Icon(
                         _currentWeather =3D=3D 'sunny' ? Icons.wb_sunny :
 (_currentWeather =3D=3D 'cloudy' ? Icons.cloud : Icons.thunderstorm),
@@ -209,8 +194,7 @@ ther
 16, fontWeight: FontWeight.w600, letterSpacing: 3.0),
                   ),
                   const SizedBox(height: 4),
-                  Text('H: 31=C2=B0 L: 24=C2=B0 =C2=B7 =E4=BD=93=E6=84=9F=
-=E6=B8=A9=E5=BA=A6 30=C2=B0', style: TextStyle(color:
+                  Text('H: 31C L: 24C', style: TextStyle(color:
 Colors.white.withAlpha(140), fontSize: 13)),
                 ],
               ),
@@ -221,8 +205,6 @@ Colors.white.withAlpha(140), fontSize: 13)),
     );
   }
 
-  // =E6=A9=AB=E5=90=91=E8=A7=80=E6=B8=AC=E6=8C=87=E6=A8=99=E8=B3=87=E8=A8=
-=8A
   Widget _buildWeatherMetricsGrid() {
     return Row(
       children: [
@@ -272,19 +254,15 @@ fontSize: 16, fontWeight: FontWeight.w500)),
       ),
     );
   }
-  Widget _buildHourlyForecast() {
-    final List<Map<String, dynamic>> hourlyData = [
-      {'time': 'Now', 'temp': '28C', 'icon': Icons.wb_sunny, 'active':
-true},
-      {'time': '13:00', 'temp': '29C', 'icon': Icons.wb_sunny, 'active':
-false},
-      {'time': '14:00', 'temp': '30C', 'icon': Icons.cloud, 'active':
-false},
-      {'time': '15:00', 'temp': '27C', 'icon': Icons.thunderstorm,
-'active': false},
-      {'time': '16:00', 'temp': '26C', 'icon': Icons.thunderstorm,
-'active': false},
-    ];
+
+Widget _buildHourlyForecast() {
+    final List<Map<String, dynamic>> hourlyData = List.of([
+      {'time': 'Now', 'temp': '28C', 'icon': Icons.wb_sunny, 'active':true},
+      {'time': '13:00', 'temp': '29C', 'icon': Icons.wb_sunny, 'active':false},
+      {'time': '14:00', 'temp': '30C', 'icon': Icons.cloud, 'active':false},
+      {'time': '15:00', 'temp': '27C', 'icon': Icons.thunderstorm,'active': false},
+      {'time': '16:00', 'temp': '26C', 'icon': Icons.thunderstorm,'active': false},
+    ]);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -308,7 +286,7 @@ false},
             physics: const BouncingScrollPhysics(),
             itemCount: hourlyData.length,
             itemBuilder: (context, index) {
-              final item =3D hourlyData[index];
+              final item = hourlyData[index];
               return Container(
                 margin: const EdgeInsets.only(right: 12),
                 width: 75,
@@ -318,38 +296,26 @@ false},
                     filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: item['active'] =3D=3D true
-                            ? Colors.white.withAlpha(22)
-                            : Colors.white.withAlpha(10),
+                        color: item['active'] == true ?
+Colors.white.withAlpha(22) : Colors.white.withAlpha(10),
                         borderRadius: BorderRadius.circular(24.0),
                         border: Border.all(
-                          color: item['active'] =3D=3D true
-                              ? Colors.white.withAlpha(50)
-                              : Colors.white.withAlpha(15),
+                          color: item['active'] == true ?
+Colors.white.withAlpha(50) : Colors.white.withAlpha(15),
                           width: 1.0,
                         ),
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            item['time'].toString(),
-                            style: TextStyle(color:
-Colors.white.withAlpha(140), fontSize: 12),
-                          ),
+                          Text(item['time'].toString(), style:
+TextStyle(color: Colors.white.withAlpha(140), fontSize: 12)),
                           const SizedBox(height: 12),
-                          Icon(
-                            item['icon'] as IconData,
-                            color: item['active'] =3D=3D true ?
-Colors.amberAccent : Colors.white,
-                            size: 22,
-                          ),
+                          Icon(item['icon'] as IconData, color:
+item['active'] == true ? Colors.amberAccent : Colors.white, size: 22),
                           const SizedBox(height: 12),
-                          Text(
-                            item['temp'].toString(),
-                            style: const TextStyle(color: Colors.white,
-fontSize: 16, fontWeight: FontWeight.w600),
-                          ),
+                          Text(item['temp'].toString(), style: const
+TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
                         ],
                       ),
                     ),
@@ -362,4 +328,3 @@ fontSize: 16, fontWeight: FontWeight.w600),
       ],
     );
   }
-
