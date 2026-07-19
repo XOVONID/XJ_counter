@@ -1,28 +1,27 @@
-name: Deploy Flutter Web to GitHub Pages
+name: Deploy Web
 
 on:
   push:
-    branches: [ "main" ]
-  workflow_dispatch:
+    branches:
+      - main
 
 permissions:
   contents: read
   pages: write
   id-token: write
 
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -33,13 +32,20 @@ jobs:
         run: flutter pub get
 
       - name: Build Web
-        run: flutter build web --base-href "/${{github.event.repository.name }}/"
+        run: flutter build web --base-href "/XJ_counter/"
 
-      - name: Upload artifact
+      - name: Upload Artifacts
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./build/web
+          path: build/web
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
