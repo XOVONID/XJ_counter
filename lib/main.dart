@@ -103,15 +103,12 @@ class _GlassWeatherDashboardState extends State<GlassWeatherDashboard> {
 
   List<Color> _getWeatherAura() {
     if (_currentWeather.contains('rainy')) {
-      return [Colors.blueGrey.withAlpha(50), Colors.indigo.withAlpha(20),
-const Color(0xFF030307)];
+      return [Colors.blueGrey.withAlpha(50), Colors.indigo.withAlpha(20),const Color(0xFF030307)];
     }
     if (_currentWeather.contains('cloudy')) {
-      return [Colors.purpleAccent.withAlpha(35),
-Colors.blueAccent.withAlpha(15), const Color(0xFF030307)];
+      return [Colors.purpleAccent.withAlpha(35),Colors.blueAccent.withAlpha(15), const Color(0xFF030307)];
     }
-    return [Colors.amberAccent.withAlpha(40),
-Colors.orangeAccent.withAlpha(15), const Color(0xFF030307)];
+    return [Colors.amberAccent.withAlpha(40),Colors.orangeAccent.withAlpha(15), const Color(0xFF030307)];
   }
 
   Widget _buildLocationHeader() {
@@ -123,14 +120,12 @@ Colors.orangeAccent.withAlpha(15), const Color(0xFF030307)];
           children: [
             const Text(
               'TAIPEI',
-              style: TextStyle(color: Colors.white, fontSize: 26,
-fontWeight: FontWeight.w300, letterSpacing: 1.5)
+              style: TextStyle(color: Colors.white, fontSize: 26,fontWeight: FontWeight.w300, letterSpacing: 1.5)
             ),
             const SizedBox(height: 4),
             Text(
               'Sunday',
-              style: TextStyle(color: Colors.white.withAlpha(120),
-fontSize: 13)
+              style: TextStyle(color: Colors.white.withAlpha(120),fontSize: 13)
             ),
           ],
         ),
@@ -148,19 +143,15 @@ fontSize: 13)
               child: Container(
                 padding: const EdgeInsets.all(10),
                 color: Colors.white.withAlpha(20),
-                child: const Icon(Icons.wb_sunny_outlined, color:
-Colors.white, size: 20),
+                child: const Icon(Icons.wb_sunny_outlined, color:Colors.white, size: 20),
               ),
             ),
           ),
           itemBuilder: (BuildContext context) {
             return [
-              const PopupMenuItem<String>(value: 'sunny', child:
-Text('Sunny')),
-              const PopupMenuItem<String>(value: 'cloudy', child:
-Text('Cloudy')),
-              const PopupMenuItem<String>(value: 'rainy', child:
-Text('Rainy')),
+              const PopupMenuItem<String>(value: 'sunny', child:Text('Sunny')),
+              const PopupMenuItem<String>(value: 'cloudy', child:Text('Cloudy')),
+              const PopupMenuItem<String>(value: 'rainy', child:Text('Rainy')),
             ];
           },
         ),
@@ -199,8 +190,7 @@ Text('Rainy')),
               decoration: BoxDecoration(
                 color: Colors.white.withAlpha(12),
                 borderRadius: BorderRadius.circular(36.0),
-                border: Border.all(color: Colors.white.withAlpha(20),
-width: 1.0),
+                border: Border.all(color: Colors.white.withAlpha(20),width: 1.0),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -219,8 +209,7 @@ width: 1.0),
                       Icon(
                         _currentWeather.contains('sunny')
                             ? Icons.wb_sunny
-                            : (_currentWeather.contains('cloudy') ?
-Icons.cloud : Icons.thunderstorm),
+                            : (_currentWeather.contains('cloudy') ? Icons.cloud : Icons.thunderstorm),
                         color: _currentWeather.contains('sunny')
                             ? Colors.amberAccent
                             : Colors.white.withAlpha(200),
@@ -232,16 +221,13 @@ Icons.cloud : Icons.thunderstorm),
                   Text(
                     _currentWeather.contains('sunny')
                         ? 'SUNNY'
-                        : (_currentWeather.contains('cloudy') ? 'CLOUDY' :
-'RAIN'),
-                    style: const TextStyle(color: Colors.white, fontSize:
-16, fontWeight: FontWeight.w600, letterSpacing: 3.0),
+                        : (_currentWeather.contains('cloudy') ? 'CLOUDY' :'RAIN'),
+                    style: const TextStyle(color: Colors.white, fontSize:16, fontWeight: FontWeight.w600, letterSpacing: 3.0),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     'H31C_L24C',
-                    style: TextStyle(color: Colors.white.withAlpha(140),
-fontSize: 13)
+                    style: TextStyle(color: Colors.white.withAlpha(140),fontSize: 13)
                   ),
                 ],
               ),
@@ -255,14 +241,11 @@ fontSize: 13)
   Widget _buildWeatherMetricsGrid() {
     return Row(
       children: [
-        _buildMetricItem(Icons.water_drop_outlined, 'HUMIDITY', '64%',
-Colors.blueAccent),
+        _buildMetricItem(Icons.water_drop_outlined, 'HUMIDITY', '64%',Colors.blueAccent),
         const SizedBox(width: 14),
-        _buildMetricItem(Icons.air_rounded, 'WIND', '12kmh',
-Colors.tealAccent),
+        _buildMetricItem(Icons.air_rounded, 'WIND', '12kmh',Colors.tealAccent),
         const SizedBox(width: 14),
-        _buildMetricItem(Icons.wb_sunny_rounded, 'UV_INDEX', 'Low',
-Colors.amberAccent),
+        _buildMetricItem(Icons.wb_sunny_rounded, 'UV_INDEX', 'Low',Colors.amberAccent),
       ],
     );
   }
@@ -275,25 +258,20 @@ accentColor) {
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
           child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal:
-16),
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal:16),
             decoration: BoxDecoration(
               color: Colors.white.withAlpha(10),
               borderRadius: BorderRadius.circular(24.0),
-              border: Border.all(color: Colors.white.withAlpha(15), width:
-1.0),
+              border: Border.all(color: Colors.white.withAlpha(15), width:1.0),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Icon(icon, color: accentColor.withAlpha(200), size: 20),
                 const SizedBox(height: 16),
-                Text(title, style: TextStyle(color:
-Colors.white.withAlpha(100), fontSize: 9, fontWeight: FontWeight.w700,
-letterSpacing: 1.0)),
+                Text(title, style: TextStyle(color:Colors.white.withAlpha(100), fontSize: 9, fontWeight: FontWeight.w700,letterSpacing: 1.0)),
                 const SizedBox(height: 4),
-                Text(value, style: const TextStyle(color: Colors.white,
-fontSize: 16, fontWeight: FontWeight.w500)),
+                Text(value, style: const TextStyle(color: Colors.white,fontSize: 16, fontWeight: FontWeight.w500)),
               ],
             ),
           ),
