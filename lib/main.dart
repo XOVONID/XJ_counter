@@ -323,8 +323,10 @@ fontSize: 16, fontWeight: FontWeight.w500)),
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
             itemCount: hourlyData.length,
-            itemBuilder: (context, index) {
-              final item = hourlyData[index];
+            itemBuilder: (BuildContext  context, index) {
+              final Map<String, dynamic> item = hourlyData[index];
+              final bool isActive = item['active'] as bool;
+              
               return Container(
                 margin: const EdgeInsets.only(right: 12),
                 width: 75,
@@ -334,11 +336,11 @@ fontSize: 16, fontWeight: FontWeight.w500)),
                     filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: item['active'] ?
+                        color: isActive ?
 Colors.white.withAlpha(22) : Colors.white.withAlpha(10),
                         borderRadius: BorderRadius.circular(24.0),
                         border: Border.all(
-                          color: item['active'] ?
+                          color: isActive ?
 Colors.white.withAlpha(50) : Colors.white.withAlpha(15),
                           width: 1.0,
                         ),
