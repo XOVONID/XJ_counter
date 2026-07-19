@@ -19,6 +19,6 @@ dev_dependencies:
 
 
  flutter:
-   uese-material-design: true
+  uses-material-design: true
     
   
