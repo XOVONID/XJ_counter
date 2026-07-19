@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Glass Weather',
+      title: 'GlassWeather',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
@@ -27,13 +27,14 @@ class GlassWeatherDashboard extends StatefulWidget {
   const GlassWeatherDashboard({super.key});
 
   @override
-  State<GlassWeatherDashboard> createState() =3D>
-_GlassWeatherDashboardState();
+  State<GlassWeatherDashboard> createState() {
+    return const _GlassWeatherDashboardState();
+  }
 }
 
 class _GlassWeatherDashboardState extends State<GlassWeatherDashboard> {
-  String _currentWeather =3D 'sunny';
-  bool _isCardPressed =3D false;
+  String _currentWeather = 'sunny';
+  bool _isCardPressed = false;
 
   void _triggerFeedback() {
     HapticFeedback.lightImpact();
@@ -41,7 +42,7 @@ class _GlassWeatherDashboardState extends State<GlassWeatherDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    final Size screenSize =3D MediaQuery.of(context).size;
+    final Size screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
       backgroundColor: const Color(0xFF030307),
@@ -86,18 +87,16 @@ class _GlassWeatherDashboardState extends State<GlassWeatherDashboard> {
   }
 
   List<Color> _getWeatherAura() {
-    switch (_currentWeather) {
-      case 'rainy':
-        return [Colors.blueGrey.withAlpha(50), Colors.indigo.withAlpha(20),
+    if (_currentWeather == 'rainy') {
+      return [Colors.blueGrey.withAlpha(50), Colors.indigo.withAlpha(20),
 const Color(0xFF030307)];
-      case 'cloudy':
-        return [Colors.purpleAccent.withAlpha(35),
-Colors.blueAccent.withAlpha(15), const Color(0xFF030307)];
-      case 'sunny':
-      default:
-        return [Colors.amberAccent.withAlpha(40),
-Colors.orangeAccent.withAlpha(15), const Color(0xFF030307)];
     }
+    if (_currentWeather == 'cloudy') {
+      return [Colors.purpleAccent.withAlpha(35),
+Colors.blueAccent.withAlpha(15), const Color(0xFF030307)];
+    }
+    return [Colors.amberAccent.withAlpha(40),
+Colors.orangeAccent.withAlpha(15), const Color(0xFF030307)];
   }
 
   Widget _buildLocationHeader() {
@@ -107,17 +106,25 @@ Colors.orangeAccent.withAlpha(15), const Color(0xFF030307)];
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('TAIPEI CITY', style: TextStyle(color: Colors.white,
-fontSize: 26, fontWeight: FontWeight.w300, letterSpacing: 1.5)),
+            const Text(
+              'TAIPEI_CITY',
+              style: TextStyle(color: Colors.white, fontSize: 26,
+fontWeight: FontWeight.w300, letterSpacing: 1.5)
+            ),
             const SizedBox(height: 4),
-            Text('Sunday, July 19', style: TextStyle(color:
-Colors.white.withAlpha(120), fontSize: 13)),
+            Text(
+              'Sunday_July_19',
+              style: TextStyle(color: Colors.white.withAlpha(120),
+fontSize: 13)
+            ),
           ],
         ),
         PopupMenuButton<String>(
           onSelected: (String value) {
             _triggerFeedback();
-            setState(() =3D> _currentWeather =3D value);
+            setState(() {
+              _currentWeather = value;
+            });
           },
           icon: ClipRRect(
             borderRadius: BorderRadius.circular(16),
@@ -131,25 +138,52 @@ Colors.white, size: 20),
               ),
             ),
           ),
-          itemBuilder: (BuildContext context) =3D> <PopupMenuEntry<String>>=
-[
-            const PopupMenuItem<String>(value: 'sunny', child:
-Text('=E6=99=B4=E5=A4=A9=E6=A8=A1=E5=BC=8F')),
-            const PopupMenuItem<String>(value: 'cloudy', child:
-Text('=E5=A4=9A=E9=9B=B2=E6=A8=A1=E5=BC=8F')),
-            const PopupMenuItem<String>(value: 'rainy', child:
-Text('=E9=9B=A8=E5=A4=A9=E6=A8=A1=E5=BC=8F')),
-          ],
+          itemBuilder: (BuildContext context) {
+            return [
+              const PopupMenuItem<String>(value: 'sunny', child:
+Text('SunnyMode')),
+              const PopupMenuItem<String>(value: 'cloudy', child:
+Text('CloudyMode')),
+              const PopupMenuItem<String>(value: 'rainy', child:
+Text('RainyMode')),
+            ];
+          },
         ),
       ],
     );
   }
 
   Widget _buildMainWeatherCard() {
+    IconData displayIcon = Icons.wb_sunny;
+    Color iconColor = Colors.amberAccent;
+    String weatherText = 'SUNNY';
+
+    if (_currentWeather == 'cloudy') {
+      displayIcon = Icons.cloud;
+      iconColor = Colors.white.withAlpha(200);
+      weatherText = 'PARTLY_CLOUDY';
+    } else if (_currentWeather == 'rainy') {
+      displayIcon = Icons.thunderstorm;
+      iconColor = Colors.white.withAlpha(200);
+      weatherText = 'HEAVY_RAIN';
+    }
+
     return GestureDetector(
-      onTapDown: (_) =3D> setState(() =3D> _isCardPressed =3D true),
-      onTapUp: (_) =3D> setState(() =3D> _isCardPressed =3D false),
-      onTapCancel: () =3D> setState(() =3D> _isCardPressed =3D false),
+      onTapDown: (TapDownDetails details) {
+        setState(() {
+          _isCardPressed = true;
+        });
+      },
+      onTapUp: (TapUpDetails details) {
+        setState(() {
+          _isCardPressed = false;
+        });
+      },
+      onTapCancel: () {
+        setState(() {
+          _isCardPressed = false;
+        });
+      },
       child: AnimatedScale(
         scale: _isCardPressed ? 0.97 : 1.0,
         duration: const Duration(milliseconds: 200),
@@ -173,29 +207,33 @@ width: 1.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('28C', style: TextStyle(color:
-Colors.white, fontSize: 86, fontWeight: FontWeight.w100, fontFamily: 'SF
-Pro Display')),
+                      const Text(
+                        '28C',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 86,
+                          fontWeight: FontWeight.w100
+                        )
+                      ),
                       Icon(
-                        _currentWeather =3D=3D 'sunny' ? Icons.wb_sunny :
-(_currentWeather =3D=3D 'cloudy' ? Icons.cloud : Icons.thunderstorm),
-                        color: _currentWeather =3D=3D 'sunny' ?
-Colors.amberAccent : Colors.white.withAlpha(200),
+                        displayIcon,
+                        color: iconColor,
                         size: 72,
                       ),
                     ],
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    _currentWeather =3D=3D 'sunny' ? 'SUNNY' : (_currentWea=
-ther
-=3D=3D 'cloudy' ? 'PARTLY CLOUDY' : 'HEAVY RAIN'),
+                    weatherText,
                     style: const TextStyle(color: Colors.white, fontSize:
 16, fontWeight: FontWeight.w600, letterSpacing: 3.0),
                   ),
                   const SizedBox(height: 4),
-                  Text('H: 31C L: 24C', style: TextStyle(color:
-Colors.white.withAlpha(140), fontSize: 13)),
+                  Text(
+                    'H_31C__L_24C',
+                    style: TextStyle(color: Colors.white.withAlpha(140),
+fontSize: 13)
+                  ),
                 ],
               ),
             ),
@@ -211,10 +249,10 @@ Colors.white.withAlpha(140), fontSize: 13)),
         _buildMetricItem(Icons.water_drop_outlined, 'HUMIDITY', '64%',
 Colors.blueAccent),
         const SizedBox(width: 14),
-        _buildMetricItem(Icons.air_rounded, 'WIND', '12 km/h',
+        _buildMetricItem(Icons.air_rounded, 'WIND', '12_kmh',
 Colors.tealAccent),
         const SizedBox(width: 14),
-        _buildMetricItem(Icons.wb_sunny_rounded, 'UV INDEX', '4 Low',
+        _buildMetricItem(Icons.wb_sunny_rounded, 'UV_INDEX', '4_Low',
 Colors.amberAccent),
       ],
     );
@@ -255,7 +293,7 @@ fontSize: 16, fontWeight: FontWeight.w500)),
     );
   }
 
-Widget _buildHourlyForecast() {
+  Widget _buildHourlyForecast() {
     final List<Map<String, dynamic>> hourlyData = List.of([
       {'time': 'Now', 'temp': '28C', 'icon': Icons.wb_sunny, 'active':true},
       {'time': '13:00', 'temp': '29C', 'icon': Icons.wb_sunny, 'active':false},
@@ -270,7 +308,7 @@ Widget _buildHourlyForecast() {
         Padding(
           padding: const EdgeInsets.only(left: 4.0, bottom: 12),
           child: Text(
-            'HOURLY FORECAST',
+            'HOURLY_FORECAST',
             style: TextStyle(
               color: Colors.white.withAlpha(120),
               fontSize: 11,
