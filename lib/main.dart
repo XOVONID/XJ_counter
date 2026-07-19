@@ -272,21 +272,17 @@ fontSize: 16, fontWeight: FontWeight.w500)),
       ),
     );
   }
-
-  // =E6=AF=8F=E5=B0=8F=E6=99=82=E9=A0=90=E5=A0=B1=EF=BC=88iOS =E6=B5=81=E9=
-=AB=94=E6=99=82=E9=96=93=E8=BB=B8=EF=BC=89
   Widget _buildHourlyForecast() {
-    final List<Map<String, dynamic>> hourlyData =3D [
-      {'time': 'Now', 'temp': '28=C2=B0', 'icon': Icons.wb_sunny, 'active':
+    final List<Map<String, dynamic>> hourlyData = [
+      {'time': 'Now', 'temp': '28C', 'icon': Icons.wb_sunny, 'active':
 true},
-      {'time': '13:00', 'temp': '29=C2=B0', 'icon': Icons.wb_sunny, 'active=
-':
+      {'time': '13:00', 'temp': '29C', 'icon': Icons.wb_sunny, 'active':
 false},
-      {'time': '14:00', 'temp': '30=C2=B0', 'icon': Icons.cloud, 'active':
+      {'time': '14:00', 'temp': '30C', 'icon': Icons.cloud, 'active':
 false},
-      {'time': '15:00', 'temp': '27=C2=B0', 'icon': Icons.thunderstorm,
+      {'time': '15:00', 'temp': '27C', 'icon': Icons.thunderstorm,
 'active': false},
-      {'time': '16:00', 'temp': '26=C2=B0', 'icon': Icons.thunderstorm,
+      {'time': '16:00', 'temp': '26C', 'icon': Icons.thunderstorm,
 'active': false},
     ];
 
@@ -295,9 +291,15 @@ false},
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 4.0, bottom: 12),
-          child: Text('HOURLY FORECAST', style: TextStyle(color:
-Colors.white.withAlpha(120), fontSize: 11, fontWeight: FontWeight.w700,
-letterSpacing: 2.0)),
+          child: Text(
+            'HOURLY FORECAST',
+            style: TextStyle(
+              color: Colors.white.withAlpha(120),
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 2.0,
+            ),
+          ),
         ),
         SizedBox(
           height: 130,
@@ -315,3 +317,49 @@ letterSpacing: 2.0)),
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
                     child: Container(
+                      decoration: BoxDecoration(
+                        color: item['active'] =3D=3D true
+                            ? Colors.white.withAlpha(22)
+                            : Colors.white.withAlpha(10),
+                        borderRadius: BorderRadius.circular(24.0),
+                        border: Border.all(
+                          color: item['active'] =3D=3D true
+                              ? Colors.white.withAlpha(50)
+                              : Colors.white.withAlpha(15),
+                          width: 1.0,
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            item['time'].toString(),
+                            style: TextStyle(color:
+Colors.white.withAlpha(140), fontSize: 12),
+                          ),
+                          const SizedBox(height: 12),
+                          Icon(
+                            item['icon'] as IconData,
+                            color: item['active'] =3D=3D true ?
+Colors.amberAccent : Colors.white,
+                            size: 22,
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            item['temp'].toString(),
+                            style: const TextStyle(color: Colors.white,
+fontSize: 16, fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
