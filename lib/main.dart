@@ -334,11 +334,11 @@ fontSize: 16, fontWeight: FontWeight.w500)),
                     filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: item['active'] == true ?
+                        color: item['active'] ?
 Colors.white.withAlpha(22) : Colors.white.withAlpha(10),
                         borderRadius: BorderRadius.circular(24.0),
                         border: Border.all(
-                          color: item['active'] == true ?
+                          color: item['active'] ?
 Colors.white.withAlpha(50) : Colors.white.withAlpha(15),
                           width: 1.0,
                         ),
@@ -349,8 +349,10 @@ Colors.white.withAlpha(50) : Colors.white.withAlpha(15),
                           Text(item['time'].toString(), style:
 TextStyle(color: Colors.white.withAlpha(140), fontSize: 12)),
                           const SizedBox(height: 12),
-                          Icon(item['icon'] as IconData, color:
-item['active'] == true ? Colors.amberAccent : Colors.white, size: 22),
+                          Icon(
+                            item['icon'] as IconData, 
+                            color: item['active'] ? Colors.amberAccent : Colors.white, 
+                            size: 22),
                           const SizedBox(height: 12),
                           Text(item['temp'].toString(), style: const
 TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
