@@ -52,7 +52,7 @@ class _GlassWeatherDashboardState extends State<GlassWeatherDashboard> {
   }
 
   void _triggerFeedback() {
-    HapticFeedback.lightImpact();
+  
   }
 
   @override
