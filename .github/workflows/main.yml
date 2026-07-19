@@ -32,11 +32,8 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Configure Web Platform
-        run: flutter create . --platforms web
-
       - name: Build Web
-        run: flutter build web --base-href "/${{ github.event.repository.name }}/"
+        run: flutter build web --base-href "/${{github.event.repository.name }}/"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
