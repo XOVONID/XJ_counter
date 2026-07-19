@@ -36,8 +36,7 @@ class GlassWeatherDashboard extends StatefulWidget {
   const GlassWeatherDashboard({super.key});
 
   @override
-  State<GlassWeatherDashboard> createState() {
-    return _GlassWeatherDashboardState();
+  State<GlassWeatherDashboard> createState() => _GlassWeatherDashboardState();
   }
 }
 
